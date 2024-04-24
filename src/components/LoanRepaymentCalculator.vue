@@ -57,12 +57,14 @@ function handleCalculatePayment () {
           <input
             v-model="pv"
             type="text"
+            required
             class="borderfocus:outline-none mx-2 rounded-md border border-slate-300 bg-zinc-100 px-3 py-1 shadow-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-sky-100"
           >
 
           <label>for</label>
           <select
             v-model="rate"
+            required
             class="borderfocus:outline-none mx-2 rounded-md border border-slate-300 px-3 py-1 shadow-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-sky-100"
           >
             <option
@@ -79,6 +81,7 @@ function handleCalculatePayment () {
           <label>repaid</label>
           <select
             v-model="period"
+            required
             class="borderfocus:outline-none mx-2 rounded-md border border-slate-300 px-3 py-1 shadow-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-sky-100"
           >
             <option
@@ -93,6 +96,7 @@ function handleCalculatePayment () {
           <label>over</label>
           <select
             v-model="term"
+            required
             class="borderfocus:outline-none mx-2 rounded-md border border-slate-300 px-3 py-1 shadow-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-sky-100"
           >
             <option
