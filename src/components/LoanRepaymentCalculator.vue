@@ -12,6 +12,7 @@ const period = ref(null)
 const term = ref(null)
 const nper = ref(null)
 const payment = ref(null)
+const pvError = ref(null)
 
 const { loanPurposes, loanPurposesError } = getLoanPurposes()
 const { repaymentPeriods, repaymentPeriodsError } = getRepaymentPeriods()
@@ -22,10 +23,18 @@ if (repaymentPeriodsError) error.value.push(repaymentPeriodsError)
 if (termMonthsError) error.value.push(termMonthsError)
 
 function handleCalculatePayment () {
-  nper.value = term.value / 12 * period.value
-  payment.value = (PMT(rate.value / 12, nper.value, pv.value)).toFixed(2)
+  if (isNaN(pv.value)) {
+    pv.value = null
+    payment.value = null
+    pvError.value = 'Please enter a valid $ amount'
+  } else if (pv.value < 1000 || pv.value > 20000000) {
+    pvError.value = '$ amount needs to between 1000 and 20,000,000'
+  } else {
+    pvError.value = null
+    nper.value = term.value / 12 * period.value
+    payment.value = (PMT(rate.value / 12, nper.value, pv.value)).toFixed(2)
+  }
 }
-
 </script>
 
 <template>
@@ -119,6 +128,13 @@ function handleCalculatePayment () {
           <div class="mx-6 border-b border-slate-200 py-2 text-xs font-semibold uppercase text-slate-500">
             Your payment is: <span class="ml-2 text-lg text-cyan-700">$ {{ payment }}</span>
           </div>
+        </div>
+
+        <div
+          v-if="pvError"
+          class="text-sm text-red-400"
+        >
+          {{ pvError }}
         </div>
       </form>
 
