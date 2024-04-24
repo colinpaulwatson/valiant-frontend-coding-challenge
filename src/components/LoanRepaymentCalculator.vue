@@ -29,62 +29,74 @@ function handleCalculatePayment () {
 </script>
 
 <template>
-  <h2>Loan Repayment Calculator</h2>
+  <div class="flex h-screen content-start justify-center bg-slate-100">
+    <div class="my-6 max-h-80 max-w-xl rounded-lg bg-white p-6 text-slate-700 shadow ring-1 ring-slate-900/5">
+      <h2 class="pb-4 pt-6 text-center text-lg font-semibold text-slate-800">
+        Loan Repayment Calculator
+      </h2>
 
-  <form @submit.prevent="handleCalculatePayment">
-    <label>I need $</label>
-    <input
-      v-model="pv"
-      type="text"
-    >
+      <form @submit.prevent="handleCalculatePayment">
+        <div class="my-4">
+          <label>I need $</label>
+          <input
+            v-model="pv"
+            type="text"
+            class="borderfocus:outline-none mx-2 rounded-md border border-slate-300 px-3 py-1 shadow-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-sky-100"
+          >
 
-    <label>for</label>
-    <select v-model="rate">
-      <option
-        v-for="loanPurpose in loanPurposes"
-        :key="loanPurpose.value"
-        :value="loanPurpose.annualRate"
-      >
-        {{ loanPurpose.label }}
-      </option>
-    </select>
+          <label>for</label>
+          <select
+            v-model="rate"
+            class="borderfocus:outline-none mx-2 rounded-md border border-slate-300 px-3 py-1 shadow-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-sky-100"
+          >
+            <option
+              v-for="loanPurpose in loanPurposes"
+              :key="loanPurpose.value"
+              :value="loanPurpose.annualRate"
+            >
+              {{ loanPurpose.label }}
+            </option>
+          </select>
+        </div>
 
-    <label>repaid</label>
-    <select v-model="period">
-      <option
-        v-for="repaymentPeriod in repaymentPeriods"
-        :key="repaymentPeriod.value"
-        :value="repaymentPeriod.value"
-      >
-        {{ repaymentPeriod.label }}
-      </option>
-    </select>
+        <div class="my-4">
+          <label>repaid</label>
+          <select
+            v-model="period"
+            class="borderfocus:outline-none mx-2 rounded-md border border-slate-300 px-3 py-1 shadow-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-sky-100"
+          >
+            <option
+              v-for="repaymentPeriod in repaymentPeriods"
+              :key="repaymentPeriod.value"
+              :value="repaymentPeriod.value"
+            >
+              {{ repaymentPeriod.label }}
+            </option>
+          </select>
 
-    <label>over</label>
-    <select v-model="term">
-      <option
-        v-for="termMonth in termMonths"
-        :key="termMonth.value"
-        :value="termMonth.value"
-      >
-        {{ termMonth.label }}
-      </option>
-    </select>
+          <label>over</label>
+          <select
+            v-model="term"
+            class="borderfocus:outline-none mx-2 rounded-md border border-slate-300 px-3 py-1 shadow-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-sky-100"
+          >
+            <option
+              v-for="termMonth in termMonths"
+              :key="termMonth.value"
+              :value="termMonth.value"
+            >
+              {{ termMonth.label }}
+            </option>
+          </select>
+        </div>
 
-    <div>
-      <button>Calculate payment</button>
-    </div>
-  </form>
+        <div>
+          <button>Calculate payment</button>
+        </div>
+      </form>
 
-  User's principal is: ${{ pv }}
-  User's annual rate is {{ rate }}
-  User's period is {{ period }}
-  User's term in months is {{ term }}
-  User's number of payments is {{ nper }}
+      Your payment is: $ {{ payment }}
 
-  Your periodic payment is: $ {{ payment }}
-
-  <!-- <ul v-if="error.length">
+      <!-- <ul v-if="error.length">
     <li
       v-for="item in error"
       :key="item"
@@ -92,4 +104,6 @@ function handleCalculatePayment () {
       Error: ** {{ item }} **
     </li>
   </ul> -->
+    </div>
+  </div>
 </template>
