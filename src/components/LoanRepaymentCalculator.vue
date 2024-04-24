@@ -23,7 +23,7 @@ if (termMonthsError) error.value.push(termMonthsError)
 
 function handleCalculatePayment () {
   nper.value = term.value / 12 * period.value
-  payment.value = PMT(rate.value / 12, nper.value, pv.value)
+  payment.value = (PMT(rate.value / 12, nper.value, pv.value)).toFixed(2)
 }
 
 </script>
