@@ -14,6 +14,7 @@ const term = ref(null)
 const nper = ref(null)
 const payment = ref(null)
 const pvError = ref(null)
+const totalRepayments = ref(null)
 
 const { loanPurposes, loanPurposesError } = getLoanPurposes()
 const { repaymentPeriods, repaymentPeriodsError } = getRepaymentPeriods()
@@ -27,11 +28,12 @@ onUpdated(() => {
   if (isNaN(pv.value)) {
     pv.value = null
     payment.value = null
-    pvError.value = 'Please enter a valid $ amount'
+    totalRepayments.value = null
   }
-  if (pv.value < 1000 || pv.value > 20000000) {
+  if ((pv.value !== null) && (pv.value < 1000 || pv.value > 20000000)) {
     pvError.value = '$ amount needs to between 1000 and 20,000,000'
     payment.value = null
+    totalRepayments.value = null
   }
   if (pv.value >= 1000 && pv.value <= 20000000) {
     pvError.value = null
@@ -40,6 +42,7 @@ onUpdated(() => {
     pvError.value = null
     nper.value = term.value / 12 * period.value.value
     payment.value = (PMT(rate.value / 12, nper.value, pv.value)).toFixed(2)
+    totalRepayments.value = (nper.value * payment.value).toFixed(2)
     periodLabel.value = period.value.label
   }
 })
@@ -126,15 +129,19 @@ onUpdated(() => {
           </select>
         </div>
 
-        <div class="mb-4 mt-6 flex items-center border-t border-slate-200">
-          <div class="mx-6 py-3 text-xs font-semibold uppercase text-slate-500">
+        <div class="mb-3 mt-6 border-t border-slate-200">
+          <div class="pt-3 text-xs font-semibold uppercase text-slate-500">
             Your {{ periodLabel }} payment is: <span class="ml-2 text-lg text-cyan-700">$ {{ payment }}</span>
+          </div>
+
+          <div class="my-1 text-xs font-semibold uppercase text-slate-500">
+            Your total repayments are: <span class="ml-2 text-lg text-cyan-700">$ {{ totalRepayments }}</span>
           </div>
         </div>
 
         <div
           v-if="pvError"
-          class="text-sm text-red-400"
+          class="text-xs text-red-400"
         >
           {{ pvError }}
         </div>
