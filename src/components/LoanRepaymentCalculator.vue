@@ -1,11 +1,8 @@
 <script setup>
 import { onUpdated, ref } from 'vue'
-import getLoanPurposes from '../helpers/GetLoanPurposes'
-import getRepaymentPeriods from '../helpers/GetRepaymentPeriods'
-import getTermMonths from '../helpers/GetTermMonths'
+import getLoanData from '../helpers/GetLoanData.js'
 import PMT from '../utils/PMT.js'
 
-const error = ref([null])
 const pv = ref(null)
 const rate = ref(null)
 const period = ref(null)
@@ -16,13 +13,9 @@ const payment = ref(null)
 const pvError = ref(null)
 const totalRepayments = ref(null)
 
-const { loanPurposes, loanPurposesError } = getLoanPurposes()
-const { repaymentPeriods, repaymentPeriodsError } = getRepaymentPeriods()
-const { termMonths, termMonthsError } = getTermMonths()
-
-if (loanPurposesError) error.value.push(loanPurposesError)
-if (repaymentPeriodsError) error.value.push(repaymentPeriodsError)
-if (termMonthsError) error.value.push(termMonthsError)
+const loanPurposes = getLoanData('http://localhost:5000/loan-purposes')
+const repaymentPeriods = getLoanData('http://localhost:5000/requested-repayment-periods')
+const termMonths = getLoanData('http://localhost:5000/requested-term-months')
 
 onUpdated(() => {
   if (isNaN(pv.value)) {
@@ -146,15 +139,6 @@ onUpdated(() => {
           {{ pvError }}
         </div>
       </form>
-
-      <!-- <ul v-if="error.length">
-    <li
-      v-for="item in error"
-      :key="item"
-    >
-      Error: ** {{ item }} **
-    </li>
-  </ul> -->
     </div>
   </div>
 </template>
