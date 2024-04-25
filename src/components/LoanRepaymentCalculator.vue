@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { onUpdated, ref } from 'vue'
 import getLoanPurposes from '../helpers/GetLoanPurposes'
 import getRepaymentPeriods from '../helpers/GetRepaymentPeriods'
 import getTermMonths from '../helpers/GetTermMonths'
@@ -22,25 +22,31 @@ if (loanPurposesError) error.value.push(loanPurposesError)
 if (repaymentPeriodsError) error.value.push(repaymentPeriodsError)
 if (termMonthsError) error.value.push(termMonthsError)
 
-function handleCalculatePayment () {
+onUpdated(() => {
   if (isNaN(pv.value)) {
     pv.value = null
     payment.value = null
     pvError.value = 'Please enter a valid $ amount'
-  } else if (pv.value < 1000 || pv.value > 20000000) {
+  }
+  if (pv.value < 1000 || pv.value > 20000000) {
     pvError.value = '$ amount needs to between 1000 and 20,000,000'
-  } else {
+    payment.value = null
+  }
+  if (pv.value >= 1000 && pv.value <= 20000000) {
+    pvError.value = null
+  }
+  if (pv.value >= 1000 && pv.value <= 20000000 && rate.value && period.value && term.value) {
     pvError.value = null
     nper.value = term.value / 12 * period.value
     payment.value = (PMT(rate.value / 12, nper.value, pv.value)).toFixed(2)
   }
-}
+})
 </script>
 
 <template>
   <div class="flex h-screen content-start justify-center bg-slate-100">
-    <div class="my-6 max-h-80 max-w-xl rounded-lg bg-white p-6 text-slate-700 shadow ring-1 ring-slate-900/5">
-      <div class="flex items-center pb-4 pt-6">
+    <div class="my-5 max-h-80 max-w-xl rounded-lg bg-white p-6 text-slate-700 shadow ring-1 ring-slate-900/5">
+      <div class="flex items-center py-3">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -118,14 +124,8 @@ function handleCalculatePayment () {
           </select>
         </div>
 
-        <div class="flex items-center py-4">
-          <div>
-            <button class="borderfocus:outline-none mr-6 rounded-md bg-cyan-500 px-3 py-2 text-slate-50 hover:bg-cyan-600">
-              Calculate payment
-            </button>
-          </div>
-
-          <div class="mx-6 border-b border-slate-200 py-2 text-xs font-semibold uppercase text-slate-500">
+        <div class="mb-4 mt-6 flex items-center border-t border-slate-200">
+          <div class="mx-6 py-3 text-xs font-semibold uppercase text-slate-500">
             Your payment is: <span class="ml-2 text-lg text-cyan-700">$ {{ payment }}</span>
           </div>
         </div>
