@@ -9,6 +9,7 @@ const error = ref([null])
 const pv = ref(null)
 const rate = ref(null)
 const period = ref(null)
+const periodLabel = ref(null)
 const term = ref(null)
 const nper = ref(null)
 const payment = ref(null)
@@ -37,8 +38,9 @@ onUpdated(() => {
   }
   if (pv.value >= 1000 && pv.value <= 20000000 && rate.value && period.value && term.value) {
     pvError.value = null
-    nper.value = term.value / 12 * period.value
+    nper.value = term.value / 12 * period.value.value
     payment.value = (PMT(rate.value / 12, nper.value, pv.value)).toFixed(2)
+    periodLabel.value = period.value.label
   }
 })
 </script>
@@ -101,8 +103,8 @@ onUpdated(() => {
           >
             <option
               v-for="repaymentPeriod in repaymentPeriods"
-              :key="repaymentPeriod.value"
-              :value="repaymentPeriod.value"
+              :key="repaymentPeriod.value.label"
+              :value="repaymentPeriod"
             >
               {{ repaymentPeriod.label }}
             </option>
@@ -126,7 +128,7 @@ onUpdated(() => {
 
         <div class="mb-4 mt-6 flex items-center border-t border-slate-200">
           <div class="mx-6 py-3 text-xs font-semibold uppercase text-slate-500">
-            Your payment is: <span class="ml-2 text-lg text-cyan-700">$ {{ payment }}</span>
+            Your {{ periodLabel }} payment is: <span class="ml-2 text-lg text-cyan-700">$ {{ payment }}</span>
           </div>
         </div>
 
