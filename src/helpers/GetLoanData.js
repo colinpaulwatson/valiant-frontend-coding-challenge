@@ -8,7 +8,7 @@ export default function getLoanData (url) {
     try {
       const res = await fetch(url)
       if (!res.ok) {
-        throw Error('Unable to get term months from data source')
+        throw Error('Unable to get loan data from data source')
       }
       loanData.value = await res.json()
     } catch (err) {
